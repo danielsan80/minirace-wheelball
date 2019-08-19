@@ -55,9 +55,13 @@ module door_base() {
     
         cube([door_width, l, min_thick]);
     
-        translate([0,l-8,-(20-2)])
-        rotate([0,90,0])
-        cylinder(r=20, h=door_width);
+        intersection() {
+            cube(door_width, l,h);
+            
+            translate([0,l-8,-(20-2)])
+            rotate([0,90,0])
+            cylinder(r=20, h=door_width);
+        }
     }
 }
 
