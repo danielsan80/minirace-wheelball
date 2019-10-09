@@ -1,7 +1,25 @@
 min_thick = 0.3;
+fix = 0.001;
 field_width = 1200;
 field_length = 1800;
-door_width = 300;
+
+gate_inner_w = 240;
+gate_outer_w = 298;
+
+gate_upright_l = 70.5;
+gate_upright_w = (gate_outer_w-gate_inner_w)/2;
+
+gate_middle_w = gate_upright_w+gate_inner_w;
+
+w_margin = 3;
+l_margin = 3;
+
+goalpost_w = (gate_outer_w-gate_inner_w)/2+w_margin*2;
+goalpost_l = gate_upright_l+l_margin*2;
+goalpost_h = 20;
+
+door_inner_width = gate_inner_w - w_margin*2;
+door_outer_width = door_inner_width + goalpost_w*2;
 
 
 include <corner.scad>;
@@ -30,37 +48,39 @@ module corners() {
 
 module door_corners() {
     r = 77;
-    translate([(field_width-door_width)/2,0,0])
+    translate([(field_width-door_outer_width)/2,0,0])
     union() {
         mirror([1,0,0])
         corner(r=r);
         
-        translate([door_width,0,0])
+        translate([door_outer_width,0,0])
         corner(r=r);
     }
 }
 
 module door_base() {
-    w = 30;
-    l = 71;
-    h = 20;
     $fn=100;
     
-    translate([(field_width-door_width)/2,0,0])
+    r = 20;
+    
+    translate([field_width/2,0,0])
+    translate([-door_outer_width/2,0,0])
     union() {
-        cube([w,l,h]);
+        cube([goalpost_w, goalpost_l, goalpost_h]);
     
-        translate([door_width-w,0,0])
-        cube([w,l,h]);
+        translate([goalpost_w+door_inner_width,0,0])
+        cube([goalpost_w, goalpost_l, goalpost_h]);
     
-        cube([door_width, l, min_thick]);
+        translate([goalpost_w-fix,0,0])
+        cube([door_inner_width+fix*2, goalpost_l, min_thick]);
     
         intersection() {
-            cube(door_width, l,h);
+            translate([goalpost_w-fix,0,0])
+            cube(door_inner_width+fix*2, goalpost_l, goalpost_h);
             
-            translate([0,l-8,-(20-2)])
+            translate([goalpost_w-fix, goalpost_l-10.0, -(r-3)])
             rotate([0,90,0])
-            cylinder(r=20, h=door_width);
+            cylinder(r=r, h=door_inner_width+fix*2);
         }
     }
 }
@@ -69,18 +89,20 @@ module gate() {
 //    translate([10.6,26.75,0])
 //    import("gate/gate.stl");
     
-    translate([10.6,26.75,0])
+    translate([field_width/2, 0, goalpost_h])
+    translate([-gate_middle_w/2, gate_upright_l/2+l_margin,0])
+    scale([1.32,1.32,1.32])
     union() {
         import("gate/upright.stl");
-//
-//        translate([1.5,0,77.55])
-//        import("gate/angle_L.stl");
-//
-//        translate([97.9,0,88.1])
-//        import("gate/traverse_186mm.stl");
-//
-//        translate([203.0,0,77.55])
-//        import("gate/angle_R.stl");
+
+        translate([1.5,0,77.55])
+        import("gate/angle_L.stl");
+
+        translate([97.9,0,88.1])
+        import("gate/traverse_186mm.stl");
+
+        translate([203.0,0,77.55])
+        import("gate/angle_R.stl");
 
         translate([203.7,0,0])
         import("gate/upright.stl");
@@ -98,7 +120,6 @@ door_corners();
 
 door_base();
 
-translate([(field_width-door_width)/2,0,20])
-scale([1.32,1.32,1.32])
+
 gate();
 
