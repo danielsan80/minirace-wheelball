@@ -212,7 +212,7 @@ module shovel6(r=33) {
 }
 
 
-module shovel7(r=32) {
+module shovel7(r=40) {
 
     $fn=100;
 
@@ -220,21 +220,19 @@ module shovel7(r=32) {
     cube_length = r*4;
     cube_height = r*2;
 
-    mul = 1.2;
-    shift = 0.7;
+    mul = 1.15;
+    shift = 0.8;
 
     translate([0,thick,0])
     difference() {
-        translate([0,-r,shovel_height+4])
+        translate([0,-r,shovel_height+10])
         rotate([0,90,0])
         cylinder(r=r,h=shovel_width, center=true);
 
-        translate([r*shift,-r*mul-thick,shovel_height+4])
-        rotate([0,90,0])
+        translate([r*shift,-r*mul-thick+1.5,shovel_height+6])
         sphere(r=r*mul,h=shovel_width+fix*2, center=true);
 
-        translate([-r*shift,-r*mul-thick,shovel_height+4])
-        rotate([0,90,0])
+        translate([-r*shift,-r*mul-thick+1.5,shovel_height+6])
         sphere(r=r*mul,h=shovel_width+fix*2, center=true);
 
         translate([0,0,-cube_height/2])
@@ -276,7 +274,7 @@ module shovel(i=1) {
 }
 
 
-for (i=[1:7]) {
+for (i=[4:4]) {
     translate([50*i,0,0])
     union() {
         trapeze();
