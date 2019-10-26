@@ -46,19 +46,19 @@ module pin(void = false) {
 }
 
 module corners() {
-    corner();
+    corner2();
 
     translate([field_width,0,0])
     mirror([1,0,0])
-    corner();
+    corner2();
 
     translate([0,field_length,0])
     mirror([0,1,0])
-    corner();
+    corner2();
 
     translate([field_width,field_length,0])
     mirror([1,1,0])
-    corner();
+    corner2();
 }
 
 module door_corners_pins(void=false) {
